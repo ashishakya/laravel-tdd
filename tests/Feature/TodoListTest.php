@@ -16,12 +16,10 @@ class TodoListTest extends TestCase
     public function test_example()
     {
         //preparation (prepare)
-        $this->withoutExceptionHandling();
 
         //action (perform)
         $response = $this->getJson(route("api.todo-list.index")); // adds content type as json
 
-        dd($response->json());
         //assertion (predict)$res
         $this->assertEquals(1, count($response->json()));
     }
