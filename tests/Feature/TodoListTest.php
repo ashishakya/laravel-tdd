@@ -20,12 +20,14 @@ class TodoListTest extends TestCase
     public function fetch_todo_list()
     {
         //preparation (prepare)
-        TodoList::create(['name'=>"My List"]);
+//        TodoList::create(['name'=>"My List"]);
+        $list = TodoList::factory()->create();
 
         //action (perform)
         $response = $this->getJson(route("api.todo-list.index")); // adds content type as json
+//        dd($response->json());
 
-        //assertion (predict)$res
+        //assertion (predict)
         $this->assertEquals(1, count($response->json()));
     }
 }
