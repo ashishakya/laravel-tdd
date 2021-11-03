@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\TodoList;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 /**
@@ -13,6 +12,18 @@ use Tests\TestCase;
 class TodoListTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
+    private $list;
+
+    public function setup(): void
+    {
+        parent::setup();
+        $this->list = TodoList::factory()->create();
+    }
+
     /**
      * A basic feature test example.
      *
@@ -24,7 +35,6 @@ class TodoListTest extends TestCase
     {
         //preparation (prepare)
 //        TodoList::create(['name'=>"My List"]);
-        $list = TodoList::factory()->create();
 
         //action (perform)
         $response = $this->getJson(route("api.todo-list.index")); // adds content type as json
@@ -41,13 +51,13 @@ class TodoListTest extends TestCase
     public function fetch_single_todolist()
     {
         // preparation
-        $list = TodoList::factory()->create();
+//        $list = $this->list;
 
         //action
-        $response = $this->getJson(route('api.todo-list.show', $list->id));
+        $response = $this->getJson(route('api.todo-list.show', $this->list->id));
 
         //assertion
         $response->assertOk();
-        $this->assertEquals($list->name, $response->json()['name']);
+        $this->assertEquals($this->list->name, $response->json()['name']);
     }
 }
