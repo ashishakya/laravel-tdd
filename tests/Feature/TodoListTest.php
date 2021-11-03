@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/**
+ *
+ */
 class TodoListTest extends TestCase
 {
     use RefreshDatabase;
@@ -17,7 +20,7 @@ class TodoListTest extends TestCase
      *
      * @test
      */
-    public function fetch_todo_list()
+    public function fetch_all_todo_list()
     {
         //preparation (prepare)
 //        TodoList::create(['name'=>"My List"]);
@@ -29,5 +32,22 @@ class TodoListTest extends TestCase
 
         //assertion (predict)
         $this->assertEquals(1, count($response->json()));
+    }
+
+
+    /**
+     * @test
+     */
+    public function fetch_single_todolist()
+    {
+        // preparation
+        $list = TodoList::factory()->create();
+
+        //action
+        $response = $this->getJson(route('api.todo-list.show', $list->id));
+
+        //assertion
+        $response->assertOk();
+        $this->assertEquals($list->name, $response->json()['name']);
     }
 }
