@@ -9,7 +9,12 @@ class TodoList extends Model
 {
     use HasFactory;
 
-    protected $fillable=[
+    protected $fillable = [
         "name",
     ];
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, "todo_list_id", "id");
+    }
 }

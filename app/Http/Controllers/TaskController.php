@@ -18,23 +18,16 @@ class TaskController extends Controller
      */
     public function index(TodoList $todoList)
     {
-//        $tasks = Task::where("todo_list_id", $todoList->id)->get();
-        $tasks = Task::all();
-
-        return response($tasks);
+        return response($todoList->tasks);
     }
 
     /**
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function store(Request $request, TodoList $todoList)
     {
-        $request["todo_list_id"] = $todoList->id;
-        Task::create($request->all());
-
-        return response([], 201);
+        return $todoList->tasks()->create($request->all());
     }
 
     /**
