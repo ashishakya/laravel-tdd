@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TodoListController;
 use Illuminate\Http\Request;
@@ -24,3 +25,4 @@ Route::apiResource("todo-lists.tasks", TaskController::class)
      ->except(["show"])
      ->shallow();
 
+Route::post("/register", RegistrationController::class)->name("auth.register");
