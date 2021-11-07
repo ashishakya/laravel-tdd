@@ -18,6 +18,9 @@ class TodoListTest extends TestCase
      */
     private $list;
 
+    /**
+     *
+     */
     public function setup(): void
     {
         parent::setup();
@@ -37,7 +40,7 @@ class TodoListTest extends TestCase
 //        TodoList::create(['name'=>"My List"]);
 
         //action (perform)
-        $response = $this->getJson(route("api.todo-list.index")); // adds content type as json
+        $response = $this->getJson(route("api.todo-lists.index")); // adds content type as json
 //        dd($response->json());
 
         //assertion (predict)
@@ -54,10 +57,29 @@ class TodoListTest extends TestCase
 //        $list = $this->list;
 
         //action
-        $response = $this->getJson(route('api.todo-list.show', $this->list->id));
+        $response = $this->getJson(route('api.todo-lists.show', $this->list->id));
 
         //assertion
         $response->assertOk();
         $this->assertEquals($this->list->name, $response->json()['name']);
+    }
+
+    /**
+     * @test
+     */
+    public function store_new_todo_list()
+    {
+        // preparation
+
+        $list = TodoList::factory()->make();
+        // action
+        $response = $this->postJson(route('api.todo-lists.store'), ["name" => $list->name])
+                         ->assertCreated()
+                         ->json();
+
+
+        // assertion
+        $this->assertEquals($response["name"],  $list->name);
+        $this->assertDatabaseHas('todo_lists', ["name" => $list->name]);
     }
 }
