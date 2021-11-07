@@ -111,10 +111,10 @@ class TodoListTest extends TestCase
      */
     public function update_todo_list()
     {
-        $this->patchJson(route('api.todo-lists.update', $this->list->id), ["name"=>"updated name"])
-        ->assertOk();
+        $this->patchJson(route('api.todo-lists.update', $this->list->id), ["name" => "updated name"])
+             ->assertOk();
 
-        $this->assertDatabaseHas("todo_lists", ["name"=>"updated name"]);
+        $this->assertDatabaseHas("todo_lists", ["name" => "updated name"]);
     }
 
     /**
