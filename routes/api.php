@@ -20,4 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::apiResource("todo-lists", TodoListController::class);
-Route::get("tasks", [TaskController::class, "index"])->name("tasks.index");
+Route::apiResource("tasks", TaskController::class);
