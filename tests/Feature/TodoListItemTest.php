@@ -54,14 +54,21 @@ class TodoListItemTest extends TestCase
     {
         $task     = Task::factory()->make();
         $todoList = TodoList::factory()->create();
+        $label    = $this->createLabel();
 
-
-        $response = $this->postJson(route("api.todo-lists.tasks.store", $todoList->id), ["title" => $task->title])
+        $response = $this->postJson(
+            route("api.todo-lists.tasks.store", $todoList->id),
+            [
+                "title"    => $task->title,
+                "label_id" => $label->id,
+            ]
+        )
                          ->assertCreated();
 
         $this->assertDatabaseHas("tasks", [
             "title"        => $task->title,
             "todo_list_id" => $todoList->id,
+            "label_id"     => $label->id,
         ]);
     }
 
@@ -89,5 +96,27 @@ class TodoListItemTest extends TestCase
              ->assertOk();
 
         $this->assertDatabaseHas("tasks", ["title" => "updated title"]);
+    }
+
+    /**
+     * @test
+     */
+    public function store_task_for_a_todo_list_without_label()
+    {
+        $task     = Task::factory()->make();
+        $todoList = TodoList::factory()->create();
+
+        $this->postJson(
+            route("api.todo-lists.tasks.store", $todoList->id),
+            [
+                "title" => $task->title,
+            ]
+        )->assertCreated();
+
+        $this->assertDatabaseHas("tasks", [
+            "title"        => $task->title,
+            "todo_list_id" => $todoList->id,
+            "label_id"     => null,
+        ]);
     }
 }
