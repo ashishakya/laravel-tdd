@@ -24,8 +24,13 @@ class TodoListTest extends TestCase
     public function setup(): void
     {
         parent::setup();
-        $this->authUser();
-        $this->list = TodoList::factory()->create();
+        $user       = $this->authUser();
+        $this->list = TodoList::factory()->create(
+            [
+                "name"=> "mu list",
+                "user_id" => $user->id,
+            ]
+        );
     }
 
     /**
@@ -39,6 +44,7 @@ class TodoListTest extends TestCase
     {
         //preparation (prepare)
 //        TodoList::create(['name'=>"My List"]);
+       $todoList =  TodoList::factory()->create();
 
         //action (perform)
         $response = $this->getJson(route("api.todo-lists.index")); // adds content type as json

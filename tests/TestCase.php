@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Models\TodoList;
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Laravel\Sanctum\Sanctum;
@@ -27,5 +28,10 @@ abstract class TestCase extends BaseTestCase
         Sanctum::actingAs($user);
 
         return $user;
+    }
+
+    public function createTodoList($args = [])
+    {
+        return TodoList::factory()->create($args);
     }
 }
