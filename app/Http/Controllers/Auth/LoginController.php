@@ -17,6 +17,8 @@ class LoginController
             return response("Credential do not match", Response::HTTP_UNAUTHORIZED);
         }
 
-        return response(["token" => 'asd']);
+        $token  = $user->createToken("test-api-token");
+
+        return response(["token" => $token->plainTextToken ]);
     }
 }

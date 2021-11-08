@@ -16,9 +16,10 @@ class LoginTest extends TestCase
     /**
      * @test
      */
-    public function a_user_can_login_with_email_and_password()
+    public function token_is_return_with_successful_login()
     {
         $user = User::factory()->create();
+
         $response = $this->postJson(route("api.login"), [
             "email"    => $user->email,
             "password" => "password", // defined in factory
