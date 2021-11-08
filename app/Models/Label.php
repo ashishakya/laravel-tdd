@@ -12,5 +12,6 @@ class Label extends Model
     protected $fillable = [
         "title",
         "colour",
+        "user_id",
     ];
 }

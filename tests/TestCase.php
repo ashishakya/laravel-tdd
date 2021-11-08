@@ -2,8 +2,10 @@
 
 namespace Tests;
 
+use App\Models\Label;
 use App\Models\TodoList;
 use App\Models\User;
+use Database\Factories\LabelFactory;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Laravel\Sanctum\Sanctum;
 
@@ -33,5 +35,10 @@ abstract class TestCase extends BaseTestCase
     public function createTodoList($args = [])
     {
         return TodoList::factory()->create($args);
+    }
+
+    public function createLabel($args = [])
+    {
+        return Label::factory()->create($args);
     }
 }
