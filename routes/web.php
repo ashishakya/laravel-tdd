@@ -28,9 +28,7 @@ Route::get('drive', function () {
             "https://www.googleapis.com/auth/drive.file",
         ]
     );
-    $url = $client->createAuthUrl();
-
-    return redirect($url);
+    return $client->createAuthUrl(); // since we are working on api we do not redirect, this is handled from frontend.
 });
 Route::get("login/google-drive/callback", function () {
     $client = new Google\Client();
