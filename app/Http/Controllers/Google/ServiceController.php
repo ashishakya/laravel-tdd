@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Google;
 
 use App\Http\Controllers\Controller;
+use App\Models\WebService;
 use Google\Client;
 use Illuminate\Http\Request;
 
@@ -27,5 +28,24 @@ class ServiceController extends Controller
 
             return response(["authenticate_redirect_url" => $url]);
         }
+    }
+
+    public function callback(Request $request)
+    {
+        $client = new Client();
+        $client->setClientId(config("google.client_id"));
+        $client->setClientSecret(config("google.client_secret"));
+        $client->setRedirectUri(config("google.redirect_url"));
+
+        $code = request("code");
+
+        return WebService::create(
+            [
+                "name"=>"google-drive",
+                "user_id" => auth()->id(),
+                "token"   => json_encode(["access_token" => $client->fetchAccessTokenWithAuthCode($code)]),
+            ]
+        );
+
     }
 }
