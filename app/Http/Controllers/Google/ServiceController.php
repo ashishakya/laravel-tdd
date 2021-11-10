@@ -32,18 +32,24 @@ class ServiceController extends Controller
 
     public function callback(Request $request)
     {
-        $client = new Client();
+        // laravel lai client ko kura yeta aaye pachi matrai tahha huncha
+
+        $client = new Client(); // client instance use gareko
+        $client = app(Client::class); // this should come from laravel. resolving it from laravel
+
         $client->setClientId(config("google.client_id"));
         $client->setClientSecret(config("google.client_secret"));
         $client->setRedirectUri(config("google.redirect_url"));
 
         $code = request("code");
+        $accessToken = $client->fetchAccessTokenWithAuthCode($code);
+//        dd($accessToken);
 
         return WebService::create(
             [
                 "name"=>"google-drive",
                 "user_id" => auth()->id(),
-                "token"   => json_encode(["access_token" => $client->fetchAccessTokenWithAuthCode($code)]),
+                "token"   => json_encode(["access_token" => $accessToken]),
             ]
         );
 
