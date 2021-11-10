@@ -30,6 +30,17 @@ class ServiceTest extends TestCase
      */
     public function test_user_can_connect_to_service_and_authenticate_redirect_url_is_returned()
     {
+        $this->mock(Client::class, function (MockInterface $mock) {
+//            since we have defined this is servic provider we dont actually call it
+//            $mock->shouldReceive("setClientId")->once();
+//            $mock->shouldReceive("setClientSecret")->once();
+//            $mock->shouldReceive("setRedirectUri")->once();
+            $mock->shouldReceive("setScopes")->once();
+            $mock->shouldReceive("createAuthUrl")
+                 ->andReturn('fake-mocked-url')
+                 ->once();
+        });
+
         $response = $this->getJson(route("api.google.service.connect", "google-drive"))
                          ->assertOk();
 
@@ -39,9 +50,10 @@ class ServiceTest extends TestCase
     public function test_service_callback_will_store_token()
     {
         $this->mock(Client::class, function (MockInterface $mock) {
-            $mock->shouldReceive("setClientId")->once();
-            $mock->shouldReceive("setClientSecret")->once();
-            $mock->shouldReceive("setRedirectUri")->once();
+//            since we have defined this is servic provider we dont actually call it
+//            $mock->shouldReceive("setClientId")->once();
+//            $mock->shouldReceive("setClientSecret")->once();
+//            $mock->shouldReceive("setRedirectUri")->once();
             $mock->shouldReceive("fetchAccessTokenWithAuthCode")
                  ->andReturn('fake-mocked-token')
                  ->once();

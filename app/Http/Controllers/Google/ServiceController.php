@@ -14,13 +14,13 @@ class ServiceController extends Controller
         "https://www.googleapis.com/auth/drive.file",
     ];
 
-    public function connect(Request $request, $service)
+    public function connect(Request $request, $service, Client $client)
     {
         if ( $service === "google-drive" ) {
-            $client = new Client();
-            $client->setClientId(config("google.client_id"));
-            $client->setClientSecret(config("google.client_secret"));
-            $client->setRedirectUri(config("google.redirect_url"));
+//            $client = new Client();
+//            $client->setClientId(config("google.client_id"));
+//            $client->setClientSecret(config("google.client_secret"));
+//            $client->setRedirectUri(config("google.redirect_url"));
             $client->setScopes(self::DRIVE_SCOPES);
 
             // since we are working on api we do not redirect, this is handled from frontend.
@@ -30,20 +30,19 @@ class ServiceController extends Controller
         }
     }
 
-    public function callback(Request $request)
+    public function callback(Request $request, Client $client)
     {
         // laravel lai client ko kura yeta aaye pachi matrai tahha huncha
 
-        $client = new Client(); // client instance use gareko
-        $client = app(Client::class); // this should come from laravel. resolving it from laravel
-
-        $client->setClientId(config("google.client_id"));
-        $client->setClientSecret(config("google.client_secret"));
-        $client->setRedirectUri(config("google.redirect_url"));
+//        $client = new Client(); // client instance use gareko
+//        $client = app(Client::class); // this should come from laravel. resolving it from laravel
+//
+//        $client->setClientId(config("google.client_id"));
+//        $client->setClientSecret(config("google.client_secret"));
+//        $client->setRedirectUri(config("google.redirect_url"));
 
         $code = request("code");
         $accessToken = $client->fetchAccessTokenWithAuthCode($code);
-//        dd($accessToken);
 
         return WebService::create(
             [
