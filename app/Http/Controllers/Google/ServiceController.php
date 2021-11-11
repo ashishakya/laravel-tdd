@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Google;
 use App\Http\Controllers\Controller;
 use App\Models\WebService;
 use Google\Client;
+use Google\Service\Drive;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ServiceController extends Controller
 {
@@ -41,16 +43,46 @@ class ServiceController extends Controller
 //        $client->setClientSecret(config("google.client_secret"));
 //        $client->setRedirectUri(config("google.redirect_url"));
 
-        $code = request("code");
+        $code        = request("code");
         $accessToken = $client->fetchAccessTokenWithAuthCode($code);
 
         return WebService::create(
             [
-                "name"=>"google-drive",
+                "name"    => "google-drive",
                 "user_id" => auth()->id(),
-                "token"   => json_encode(["access_token" => $accessToken]),
+                "token"   => ["access_token" => $accessToken] ,
             ]
         );
 
+    }
+
+    public function store(Request $request,  WebService $service, Client $client)
+    {
+        $accessToken = $service->token["access_token"];
+        $client->setAccessToken($accessToken);
+
+        $service = new Drive($client);
+        $file    = new Drive\DriveFile() ;
+
+        DEFINE("TESTFILE", 'testfile-small.txt');
+        if (!file_exists(TESTFILE)) {
+            $fh = fopen(TESTFILE, 'w');
+            fseek($fh, 1024 * 1024);
+            fwrite($fh, "!", 1);
+            fclose($fh);
+        }
+
+        $file->setName("Hello World!");
+        $result2 = $service->files->create(
+            $file,
+            array(
+                'data' => file_get_contents(TESTFILE),
+                'mimeType' => 'application/octet-stream',
+                'uploadType' => 'multipart'
+            )
+        );
+
+
+        return response("", Response::HTTP_CREATED);
     }
 }

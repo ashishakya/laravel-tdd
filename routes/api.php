@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource("labels", LabelController::class);
     Route::get("google/web-service/connect/{service}", [ServiceController::class, "connect"])->name("google.service.connect");
     Route::post("google/web-service/callback", [ServiceController::class, "callback"])->name("google.service.callback");
+    Route::post("google/web-service/{service}", [ServiceController::class, "store"])->name("google.service.store");
 });
 
 Route::post("/register", RegistrationController::class)->name("auth.register");

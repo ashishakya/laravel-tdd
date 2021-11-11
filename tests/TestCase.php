@@ -5,6 +5,7 @@ namespace Tests;
 use App\Models\Label;
 use App\Models\TodoList;
 use App\Models\User;
+use App\Models\WebService;
 use Database\Factories\LabelFactory;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Laravel\Sanctum\Sanctum;
@@ -40,5 +41,10 @@ abstract class TestCase extends BaseTestCase
     public function createLabel($args = [])
     {
         return Label::factory()->create($args);
+    }
+
+    public function createWebService($arg = [])
+    {
+        return WebService::factory()->create();
     }
 }
