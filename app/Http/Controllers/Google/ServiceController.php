@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Google;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Models\WebService;
 use Google\Client;
@@ -66,7 +67,7 @@ class ServiceController extends Controller
 
         // create a json file with this data
         $fileName = "tasks-dump.json";
-        Storage::put("/public/temp/".$fileName, $tasks->toJson());
+        Storage::put("/public/temp/".$fileName, TaskResource::collection($tasks)->toJson());
 
         // create a zip with this file
         $zip = new \ZipArchive();
@@ -101,7 +102,8 @@ class ServiceController extends Controller
             ]
         );
 
+        Storage::deleteDirectory("public/temp");
 
-        return response("", Response::HTTP_CREATED);
+        return response("Uploaded", Response::HTTP_CREATED);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TodoListRequest;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Models\TodoList;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class TaskController extends Controller
      */
     public function index(TodoList $todoList)
     {
-        return response($todoList->tasks);
+        return TaskResource::collection($todoList->tasks);
     }
 
     /**
@@ -27,27 +27,23 @@ class TaskController extends Controller
      */
     public function store(Request $request, TodoList $todoList)
     {
-        return $todoList->tasks()->create($request->all());
+        $task = $todoList->tasks()->create($request->all());
+        return new TaskResource($task);
     }
 
     /**
      * @param \App\Models\Task $task
      *
      */
-    public
-    function destroy(
-        Task $task
-    ) {
+    public function destroy(Task $task)
+    {
         $task->delete();
 
         return response("", Response::HTTP_NO_CONTENT);
     }
 
-    public
-    function update(
-        Request $request,
-        Task $task
-    ) {
+    public function update(Request $request, Task $task)
+    {
         return $task->update($request->all());
     }
 }
