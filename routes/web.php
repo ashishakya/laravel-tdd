@@ -31,6 +31,7 @@ Route::get('drive', function () {
     return $client->createAuthUrl(); // since we are working on api we do not redirect, this is handled from frontend.
 });
 Route::get("login/google-drive/callback", function () {
+    return request("code");
     $client = new Google\Client();
     $client->setClientId(config("google.client_id"));
     $client->setClientSecret(config("google.client_secret"));
