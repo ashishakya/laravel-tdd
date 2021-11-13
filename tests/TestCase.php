@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Models\Label;
+use App\Models\Task;
 use App\Models\TodoList;
 use App\Models\User;
 use App\Models\WebService;
@@ -45,6 +46,11 @@ abstract class TestCase extends BaseTestCase
 
     public function createWebService($arg = [])
     {
-        return WebService::factory()->create();
+        return WebService::factory()->create($arg);
+    }
+
+    public function createTask($arg = [])
+    {
+        return Task::factory()->create($arg);
     }
 }

@@ -70,6 +70,12 @@ class ServiceTest extends TestCase
 
     public function test_data_of_a_week_can_be_stored_in_google_drive()
     {
+        $this->createTask(["created_at"=>now()->subDays(2)]);
+        $this->createTask(["created_at"=>now()->subDays(3)]);
+        $this->createTask(["created_at"=>now()->subDays(4)]);
+        $this->createTask(["created_at"=>now()->subDays(6)]);
+
+        $this->createTask(["created_at"=>now()->subDays(14)]);
         $this->mock(Client::class, function (MockInterface $mock) {
             $mock->shouldReceive("setAccessToken");
             $mock->shouldReceive("getLogger->info");
