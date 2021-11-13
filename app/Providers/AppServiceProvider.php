@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(Client::class, function () {
-            $client = app(Client::class); // this should come from laravel. resolving it from laravel
+            $client = new Client(); // this should come from laravel. resolving it from laravel
             $client->setClientId(config("google.client_id"));
             $client->setClientSecret(config("google.client_secret"));
             $client->setRedirectUri(config("google.redirect_url"));
